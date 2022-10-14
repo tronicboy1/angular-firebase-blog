@@ -1,1 +1,5 @@
-<p>post-list works!</p>
+<main *ngFor="let post of this.posts">
+  <app-post [post]="post"></app-post>
+</main>
+<div id="list-end" #listEnd></div>
+

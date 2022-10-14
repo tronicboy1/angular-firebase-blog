@@ -1,0 +1,16 @@
+article {
+  margin: 1rem auto;
+  padding: 0 1rem;
+  width: 90%;
+  max-width: 800px;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid white;
+  background-color: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.091);
+}
+
+article p small {
+  color: grey;
+  font-size: 0.75rem;
+}

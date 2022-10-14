@@ -1,9 +1,16 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    match /{document=**} {
-      allow read, write: if
-          request.time < timestamp.date(2022, 11, 11);
+    match /posts/{post} {
+      function postDataIsValid(data) {
+        let titleIsCorrect = ("title" in data) && data.title.size() > 0 &&  data.title.size() < 255;
+        let bodyIsCorrect = ("body" in data) && data.body.size() > 0 &&  data.body.size() < 10000;
+        let createdAtIsCorrect = ("createdAt" in data) && data.createdAt > 0;
+        return titleIsCorrect && bodyIsCorrect && createdAtIsCorrect;
+      }
+
+      allow read: if true;
+      allow create: if postDataIsValid(request.resource.data);
     }
   }
 }
