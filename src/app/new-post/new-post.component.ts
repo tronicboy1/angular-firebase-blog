@@ -29,7 +29,7 @@ export class NewPostComponent implements OnInit {
     if (title.length > 0 && body.length > 0) {
       this.loading = true;
       this.postsService
-        .createPost({ title, body, createdAt: Date.now() })
+        .createPost({ title, body })
         .then(() => {
           form.reset();
           this.show = false;
