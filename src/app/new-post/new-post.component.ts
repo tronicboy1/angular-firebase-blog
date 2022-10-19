@@ -1,4 +1,5 @@
 import { Component, OnInit } from "@angular/core";
+import { filter, fromEvent, Subscription } from "rxjs";
 import { PostsService } from "../posts.service";
 
 @Component({
@@ -9,15 +10,23 @@ import { PostsService } from "../posts.service";
 export class NewPostComponent implements OnInit {
   public show = false;
   private loading = false;
+  private subscriptions: Subscription[] = [];
 
   constructor(private postsService: PostsService) {}
 
   ngOnInit(): void {
-    document.addEventListener("click", this.handleDocumentClick);
+    const click$ = fromEvent(document, "click");
+    const escKeydown$ = fromEvent<KeyboardEvent>(document, "keydown").pipe(
+      filter((event) => !event.isComposing && event.key === "Escape"),
+    );
+    this.subscriptions.push(
+      click$.subscribe(this.handleDocumentClick),
+      escKeydown$.subscribe(this.handleDocumentClick),
+    );
   }
 
   ngOnDestroy(): void {
-    document.removeEventListener("click", this.handleDocumentClick);
+    this.subscriptions.forEach((subscription) => subscription.unsubscribe());
   }
 
   private handleDocumentClick: EventListener = (event) => {
