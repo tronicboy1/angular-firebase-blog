@@ -1,10 +1,10 @@
-import { Component, OnInit } from '@angular/core';
-import { PostsService } from '../posts.service';
+import { Component, OnInit } from "@angular/core";
+import { PostsService } from "../posts.service";
 
 @Component({
-  selector: 'app-new-post',
-  templateUrl: './new-post.component.html',
-  styleUrls: ['./new-post.component.css'],
+  selector: "app-new-post",
+  templateUrl: "./new-post.component.html",
+  styleUrls: ["./new-post.component.css"],
 })
 export class NewPostComponent implements OnInit {
   public show = false;
@@ -12,9 +12,20 @@ export class NewPostComponent implements OnInit {
 
   constructor(private postsService: PostsService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    document.addEventListener("click", this.handleDocumentClick);
+  }
 
-  public handleShowButtonClick: EventListener = () => {
+  ngOnDestroy(): void {
+    document.removeEventListener("click", this.handleDocumentClick);
+  }
+
+  private handleDocumentClick: EventListener = (event) => {
+    this.show = false;
+  };
+
+  public handleShowButtonClick: EventListener = (event) => {
+    event.stopPropagation();
     this.show = true;
   };
 
@@ -24,8 +35,8 @@ export class NewPostComponent implements OnInit {
     const form = event.currentTarget;
     if (!(form instanceof HTMLFormElement)) throw TypeError();
     const formData = new FormData(form);
-    const title = formData.get('title')!.toString().trim();
-    const body = formData.get('body')!.toString().trim();
+    const title = formData.get("title")!.toString().trim();
+    const body = formData.get("body")!.toString().trim();
     if (title.length > 0 && body.length > 0) {
       this.loading = true;
       this.postsService
