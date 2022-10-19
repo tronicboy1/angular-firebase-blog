@@ -1,7 +1,8 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Observable, map, mergeMap, Subscription } from 'rxjs';
 import type { QueryDocumentSnapshot } from 'firebase/firestore';
-import { Post, PostsService } from '../posts.service';
+import { PostsService } from '../posts.service';
+import { Post } from '@custom-types/posts';
 
 @Component({
   selector: 'app-post-list',
