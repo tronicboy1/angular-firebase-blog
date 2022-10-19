@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
-import { delay, Observable, of } from 'rxjs';
+import { Observable } from 'rxjs';
 import {
   getFirestore,
+  doc,
+  getDoc,
+  updateDoc,
+  deleteDoc,
   collection,
   addDoc,
   getDocs,
@@ -12,7 +16,11 @@ import {
   onSnapshot,
   startAt,
 } from 'firebase/firestore';
-import type { QueryDocumentSnapshot, DocumentData } from 'firebase/firestore';
+import type {
+  QueryDocumentSnapshot,
+  DocumentData,
+  DocumentSnapshot,
+} from 'firebase/firestore';
 import type { Firestore } from 'firebase/firestore';
 import { firebaseApp } from '@firebase/index';
 
@@ -20,14 +28,16 @@ export type Post = {
   title: string;
   body: string;
   createdAt: number;
+  updatedAt: number;
 };
 
-type DocumentObservable = Observable<QueryDocumentSnapshot<DocumentData>[]>;
+type DocumentsObservable = Observable<QueryDocumentSnapshot<DocumentData>[]>;
 
 const DUMMY_POST: Post = {
   title: 'Austin Mayer',
   body: 'Programmer, full-stack.',
   createdAt: Date.now(),
+  updatedAt: Date.now(),
 };
 
 @Injectable({
@@ -44,7 +54,7 @@ export class PostsService {
   public getPosts(
     lastDoc: QueryDocumentSnapshot | undefined,
     limit = 5
-  ): DocumentObservable {
+  ): DocumentsObservable {
     return new Observable((observer) => {
       const ref = collection(this.db, this.collectionRoot);
       const constraints = [orderBy('createdAt', 'desc'), limitBy(limit)];
@@ -60,11 +70,17 @@ export class PostsService {
     });
   }
 
-  public getPost(key: string): Observable<Post> {
-    return of(DUMMY_POST).pipe(delay(1000));
+  public getPost(key: string): Observable<DocumentSnapshot<DocumentData>> {
+    return new Observable((observer) => {
+      const ref = doc(this.db, `${this.collectionRoot}/${key}`);
+      getDoc(ref)
+        .then((doc) => observer.next(doc))
+        .catch((error) => observer.error(error))
+        .finally(() => observer.complete());
+    });
   }
 
-  public watchForNewPosts(): DocumentObservable {
+  public watchForNewPosts(): DocumentsObservable {
     return new Observable((observer) => {
       let unsubscribe: ReturnType<typeof onSnapshot> = () => 0;
       const listenForNewestPosts = () => {
@@ -95,10 +111,13 @@ export class PostsService {
   }
 
   public updatePost(key: string, post: Post): Promise<void> {
-    return Promise.resolve();
+    const ref = doc(this.db, `${this.collectionRoot}/${key}`);
+    const modifiedPost: Post = { ...post, updatedAt: Date.now() };
+    return updateDoc(ref, modifiedPost);
   }
 
-  public deletePost(key: string, post: Post): Promise<void> {
-    return Promise.resolve();
+  public deletePost(key: string): Promise<void> {
+    const ref = doc(this.db, `${this.collectionRoot}/${key}`);
+    return deleteDoc(ref);
   }
 }

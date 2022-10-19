@@ -6,11 +6,12 @@ service cloud.firestore {
         let titleIsCorrect = ("title" in data) && data.title.size() > 0 &&  data.title.size() < 255;
         let bodyIsCorrect = ("body" in data) && data.body.size() > 0 &&  data.body.size() < 10000;
         let createdAtIsCorrect = ("createdAt" in data) && data.createdAt > 0;
-        return titleIsCorrect && bodyIsCorrect && createdAtIsCorrect;
+        let updatedAtIsCorrect = ("updatedAt" in data) && data.createdAt > 0;
+        return titleIsCorrect && bodyIsCorrect && createdAtIsCorrect && updatedAtIsCorrect;
       }
 
       allow read: if true;
-      allow create: if postDataIsValid(request.resource.data);
+      allow create, update: if postDataIsValid(request.resource.data);
     }
   }
 }
