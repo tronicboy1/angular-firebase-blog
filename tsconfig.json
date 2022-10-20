@@ -5,7 +5,8 @@
     "baseUrl": "./",
     "paths": {
       "@firebase/*": ["src/firebase/*"],
-      "@custom-types/*": ["src/types/*"]
+      "@custom-types/*": ["src/types/*"],
+      "@services/*": ["src/app/services/*"]
     },
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,

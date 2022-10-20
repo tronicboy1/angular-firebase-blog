@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { filter, fromEvent, Subscription } from "rxjs";
-import { PostsService } from "../posts.service";
+import { PostsService } from "src/app/services/posts.service";
 
 @Component({
   selector: "app-new-post",
