@@ -3,12 +3,10 @@
   "compileOnSave": false,
   "compilerOptions": {
     "baseUrl": "./",
-    /* ここの設定を追加します。 */
     "paths": {
       "@firebase/*": ["src/firebase/*"],
       "@custom-types/*": ["src/types/*"]
     },
-    /* ここ以下は全部一緒 */
     "outDir": "./dist/out-tsc",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
