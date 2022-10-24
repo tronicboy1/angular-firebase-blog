@@ -1,6 +1,7 @@
 import { Component, OnInit } from "@angular/core";
 import { filter, fromEvent, Subscription } from "rxjs";
 import { PostsService } from "src/app/services/posts.service";
+import "lit-markdown-editor";
 
 @Component({
   selector: "app-new-post",
@@ -15,7 +16,7 @@ export class NewPostComponent implements OnInit {
   constructor(private postsService: PostsService) {}
 
   ngOnInit(): void {
-    const click$ = fromEvent(document, "click");
+    const click$ = fromEvent(document, "clickdown");
     const escKeydown$ = fromEvent<KeyboardEvent>(document, "keydown").pipe(
       filter((event) => !event.isComposing && event.key === "Escape"),
     );
