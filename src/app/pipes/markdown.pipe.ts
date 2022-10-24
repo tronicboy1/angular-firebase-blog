@@ -5,6 +5,12 @@ import { marked } from "marked";
   name: "markdown",
 })
 export class MarkdownPipe implements PipeTransform {
+  /**
+   * This Pipe requires the use of AsyncPipe operator, async.
+   *
+   * @example
+   * <div [innerHTML]="`# Title` | markdown | async">
+   */
   transform(rawMarkdown: string) {
     return new Promise<string>((resolve, reject) => {
       marked.parse(rawMarkdown, (error, result) => {
