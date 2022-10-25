@@ -1,5 +1,8 @@
 {
   "projects": {
-    "default": "austin-blog-965da"
-  }
+    "default": "austin-mayer-blog",
+    "production": "austin-mayer-blog"
+  },
+  "targets": {},
+  "etags": {}
 }
